@@ -1,0 +1,31 @@
+{
+  "name":           "uupaa.minify.js",
+  "version":        "0.8.0",
+  "description":    "JavaScript source code minifier.",
+  "url":            "https://github.com/uupaa/Minify.js",
+  "keywords":       ["Minify", "util", "uupaa", "WebModule"],
+  "repository": {
+    "type":         "git",
+    "url":          "https://github.com/uupaa/Minify.js.git"
+  },
+  "scripts": {
+    "build":        "node ./bin/Minify.js --verbose --strict --keep --pretty",
+    "test":         "npm run test-node",
+    "test-node":    ""
+  },
+  "x-build": {
+    "inputs":       ["lib/Minify.js"],
+    "output":       "release/Minify.min.js"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+  },
+  "bin":            "./bin/Minify.js",
+  "lib":            "./lib/",
+  "main":           "./bin/Minify.js",
+  "author":         "uupaa <uupaa.js@gmail.com>",
+  "license":        "MIT",
+  "contributors":   []
+}
+
