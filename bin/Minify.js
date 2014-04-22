@@ -66,8 +66,8 @@ var options = {
         preprocess: ["assert"]      // LabelStringArray: ["assert", "debug", ...]
     };
 
-_loadDependenciesModule(options, "./", "package.json");
-_loadDevDependenciesModule(options, "./", "package.json");
+_loadDependenciesModule(options, "", "package.json");
+_loadDevDependenciesModule(options, "", "package.json");
 
 options = _parseCommandLineOptions(options);
 
@@ -181,8 +181,7 @@ function _parseCommandLineOptions(options) {
             if (argv[i][0] === "@") {
                 options.preprocess.push(argv[i].slice(1));
             } else {
-                if (options.files.indexOf("./" + argv[i]) < 0 &&
-                    options.files.indexOf(       argv[i]) < 0) { // avoid duplicate
+                if (options.files.indexOf(argv[i]) < 0) { // avoid duplicate
                     options.files.push(argv[i]);
                 }
             }
@@ -191,7 +190,7 @@ function _parseCommandLineOptions(options) {
     // work dir
     if (options.output) {
         if (options.output.indexOf("/") <= 0) {
-            options.workDir = "./";
+            options.workDir = "";
         } else {
             // "release/Zzz.min.js" -> "release/";
             options.workDir = (options.output.split("/").slice(0, -1)).join("/") + "/";
@@ -201,7 +200,7 @@ function _parseCommandLineOptions(options) {
 }
 
 function _loadDependenciesModule(options,  // @arg Object: { dependenciesFiles, dependenciesModules }
-                                 dir,      // @arg String: "./"
+                                 dir,      // @arg String: ""
                                  file) {   // @arg String: "package.json"
     var json = JSON.parse( fs.readFileSync(dir + file) );
 
@@ -218,7 +217,7 @@ function _loadDependenciesModule(options,  // @arg Object: { dependenciesFiles, 
             }
         });
     }
-    if (dir !== "./") {
+    if (dir) {
         var build = json["x-build"] || json["build"];
 
         if (build) {
@@ -236,7 +235,7 @@ function _loadDependenciesModule(options,  // @arg Object: { dependenciesFiles, 
 }
 
 function _loadDevDependenciesModule(options,  // @arg Object: { devDependenciesFiles, devDependenciesModules }
-                                    dir,      // @arg String: "./"
+                                    dir,      // @arg String: ""
                                     file) {   // @arg String: "package.json"
     var json = JSON.parse( fs.readFileSync(dir + file) );
 
@@ -253,7 +252,7 @@ function _loadDevDependenciesModule(options,  // @arg Object: { devDependenciesF
             }
         });
     }
-    if (dir !== "./") {
+    if (dir) {
         var build = json["x-build"] || json["build"];
 
         if (build) {
