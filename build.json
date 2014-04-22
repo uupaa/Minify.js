@@ -1,22 +1,16 @@
 {
-  "solo": {
-    "name": {
-      "git": "Minify.js",
-      "npm": "uupaa.minify.js"
-    },
+  "name": {
+    "git": "Minify.js",
+    "npm": "uupaa.minify.js"
+  },
+  "build": {
     "files": [
       "lib/Minify.js"
     ],
-    "modules": []
+    "output": "release/Minify.min.js"
   },
-  "release": {
-    "name": {
-      "git": "Minify.js",
-      "npm": "uupaa.minify.js"
-    },
-    "files": [
-      "./lib/Minify.js"
-    ],
-    "modules": []
-  }
+  "dependenciesFiles": [],
+  "dependenciesModules": [],
+  "devDependenciesFiles": [],
+  "devDependenciesModules": []
 }

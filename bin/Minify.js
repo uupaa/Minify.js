@@ -50,21 +50,24 @@ var options = {
         footer:     "",             // PathString: footer file.
         strict:     false,          // Boolean: true is add 'use strict'.
         pretty:     false,          // Boolean: true is pretty print.
-        files:      package.files,  // PathStringArray: ["input-file-name", ...]
-        moduleFiles:[],             // PathStringArray: ["input-file-name", ...]
+        files:      package.files,  // PathStringArray: package.json x-build.files. ["input-file-name", ...]
+        dependenciesFiles: [],      // PathStringArray: dependencies files. ["input-file-name", ...]
+        dependenciesModules: [],    // ModuleNameStringArray: [module, ...]
+        devDependenciesFiles: [],   // PathStringArray: devDependencies files. ["input-file-name", ...]
+        devDependenciesModules: [], // ModuleNameStringArray: [module, ...]
         output:     package.output, // PathString: "output-file-name"
         option:     [],             // OptionStringArray: ["language_in ECMASCRIPT5_STRICT", ...];
         compile:    true,           // Boolean: true is compile.
-        release:    false,          // Boolean: true is release build, use moduleFiles.
+        release:    false,          // Boolean: true is release build, use dependenciesFiles.
         externs:    [],             // ExternFilePathArray: ["externs-file-name", ...]
-        modules:    [],             // ModuleNameStringArray: [moduel, ...]
         verbose:    false,          // Boolean: true is verbose mode.
         workDir:    "",             // PathString: work dir.
         advanced:   true,           // Boolean: true is ADVANCED_OPTIMIZATIONS MODE.
         preprocess: ["assert"]      // LabelStringArray: ["assert", "debug", ...]
     };
 
-_loadModule(options, "./", "package.json");
+_loadDependenciesModule(options, "./", "package.json");
+_loadDevDependenciesModule(options, "./", "package.json");
 
 options = _parseCommandLineOptions(options);
 
@@ -85,8 +88,13 @@ if (!options.workDir.length) {
     return;
 }
 
-Minify(options.release ? options.moduleFiles
-                       : options.files, {
+var files = options.files;
+
+if (options.release) {
+    files = [].concat(options.dependenciesFiles, options.files);
+}
+
+Minify(files, {
     "brew":         options.brew,
     "keep":         options.keep,
     "nowrap":       options.nowrap,
@@ -128,16 +136,15 @@ function _loadCurrentDirectoryPackageJSON() {
 
 function _saveBuildSettings(options) {
     var saveSettingsObject = {
-            solo: {
-                name:   options.name,
+            name: options.name,
+            build: {
                 files:  options.files,
-                modules:[]
+                output: options.output,
             },
-            release: {
-                name:   options.name,
-                files:  options.moduleFiles,
-                modules:options.modules
-            }
+            dependenciesFiles: options.dependenciesFiles,
+            dependenciesModules: options.dependenciesModules,
+            devDependenciesFiles: options.devDependenciesFiles,
+            devDependenciesModules: options.devDependenciesModules
         };
 
     if (options.verbose) {
@@ -178,10 +185,6 @@ function _parseCommandLineOptions(options) {
                     options.files.indexOf(       argv[i]) < 0) { // avoid duplicate
                     options.files.push(argv[i]);
                 }
-                if (options.moduleFiles.indexOf("./" + argv[i]) < 0 &&
-                    options.moduleFiles.indexOf(       argv[i]) < 0) { // avoid duplicate
-                    options.moduleFiles.push(argv[i]);
-                }
             }
         }
     }
@@ -197,35 +200,72 @@ function _parseCommandLineOptions(options) {
     return options;
 }
 
-function _loadModule(options, // @arg Object: { files, modules }
-                     dir,     // @arg String: "./"
-                     file) {  // @arg String: "package.json"
+function _loadDependenciesModule(options,  // @arg Object: { dependenciesFiles, dependenciesModules }
+                                 dir,      // @arg String: "./"
+                                 file) {   // @arg String: "package.json"
     var json = JSON.parse( fs.readFileSync(dir + file) );
 
     if (json.dependencies) {
         Object.keys(json.dependencies).forEach(function(moduleName) {
 
-            if (options.modules.indexOf(moduleName) < 0) { // avoid duplicate
+            if (options.dependenciesModules.indexOf(moduleName) < 0) { // avoid duplicate
                 var path = dir + "node_modules/" + moduleName + "/" + file;
 
                 if (fs.existsSync(path)) {
-                    options.modules.push(moduleName);
-                    _loadModule(options, dir + "node_modules/" + moduleName + "/", file);
+                    options.dependenciesModules.push(moduleName);
+                    _loadDependenciesModule(options, property, dir + "node_modules/" + moduleName + "/", file);
                 }
             }
         });
     }
-    var build = json["x-build"] || json["build"];
+    if (dir !== "./") {
+        var build = json["x-build"] || json["build"];
 
-    if (build) {
-        var files = build.files || build.inputs || null; // build.inputs is deprecated.
+        if (build) {
+            var files = build.files || build.inputs || null; // build.inputs is deprecated.
 
-        if (Array.isArray(files)) {
-            files.forEach(function(file) {
-                if (options.moduleFiles.indexOf(file) < 0) { // avoid duplicate
-                    options.moduleFiles.push(dir + file);
+            if (Array.isArray(files)) {
+                files.forEach(function(file) {
+                    if (options.dependenciesFiles.indexOf(file) < 0) { // avoid duplicate
+                        options.dependenciesFiles.push(dir + file);
+                    }
+                });
+            }
+        }
+    }
+}
+
+function _loadDevDependenciesModule(options,  // @arg Object: { devDependenciesFiles, devDependenciesModules }
+                                    dir,      // @arg String: "./"
+                                    file) {   // @arg String: "package.json"
+    var json = JSON.parse( fs.readFileSync(dir + file) );
+
+    if (json.devDependencies) {
+        Object.keys(json.devDependencies).forEach(function(moduleName) {
+
+            if (options.devDependenciesModules.indexOf(moduleName) < 0) { // avoid duplicate
+                var path = dir + "node_modules/" + moduleName + "/" + file;
+
+                if (fs.existsSync(path)) {
+                    options.devDependenciesModules.push(moduleName);
+                    _loadDevDependenciesModule(options, property, dir + "node_modules/" + moduleName + "/", file);
                 }
-            });
+            }
+        });
+    }
+    if (dir !== "./") {
+        var build = json["x-build"] || json["build"];
+
+        if (build) {
+            var files = build.files || build.inputs || null; // build.inputs is deprecated.
+
+            if (Array.isArray(files)) {
+                files.forEach(function(file) {
+                    if (options.devDependenciesFiles.indexOf(file) < 0) { // avoid duplicate
+                        options.devDependenciesFiles.push(dir + file);
+                    }
+                });
+            }
         }
     }
 }
