@@ -9,6 +9,9 @@
     ],
     "output": "release/Minify.min.js"
   },
+  "moduleTargets": {
+    "uupaa.minify.js": []
+  },
   "dependenciesFiles": [],
   "dependenciesModules": [],
   "devDependenciesFiles": [],

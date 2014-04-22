@@ -51,6 +51,7 @@ var options = {
         strict:     false,          // Boolean: true is add 'use strict'.
         pretty:     false,          // Boolean: true is pretty print.
         files:      package.files,  // PathStringArray: package.json x-build.files. ["input-file-name", ...]
+        moduleTargets: {},          // Object: { moduleName: ["Browser", "Worker", "Node"], ... }
         dependenciesFiles: [],      // PathStringArray: dependencies files. ["input-file-name", ...]
         dependenciesModules: [],    // ModuleNameStringArray: [module, ...]
         devDependenciesFiles: [],   // PathStringArray: devDependencies files. ["input-file-name", ...]
@@ -66,6 +67,7 @@ var options = {
         preprocess: ["assert"]      // LabelStringArray: ["assert", "debug", ...]
     };
 
+options.moduleTargets[package.name.npm] = package.target;
 _loadDependenciesModule(options, "", "package.json");
 _loadDevDependenciesModule(options, "", "package.json");
 
@@ -144,6 +146,7 @@ function _saveBuildSettings(options) {
                 output: options.output,
                 target: options.target
             },
+            moduleTargets: options.moduleTargets,
             dependenciesFiles: options.dependenciesFiles,
             dependenciesModules: options.dependenciesModules,
             devDependenciesFiles: options.devDependenciesFiles,
@@ -233,6 +236,7 @@ function _loadDependenciesModule(options,  // @arg Object: { dependenciesFiles, 
                     }
                 });
             }
+            options.moduleTargets[json.name] = build.target;
         }
     }
 }
@@ -268,6 +272,7 @@ function _loadDevDependenciesModule(options,  // @arg Object: { devDependenciesF
                     }
                 });
             }
+            options.moduleTargets[json.name] = build.target;
         }
     }
 }
