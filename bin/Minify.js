@@ -51,6 +51,7 @@ var options = {
         strict:     false,          // Boolean: true is add 'use strict'.
         pretty:     false,          // Boolean: true is pretty print.
         files:      package.files,  // PathStringArray: package.json x-build.files. ["input-file-name", ...]
+        target:     package.target, // StringArray: build target. ["Browser", "Worker", "Node"]
         moduleTargets: {},          // Object: { moduleName: ["Browser", "Worker", "Node"], ... }
         dependenciesFiles: [],      // PathStringArray: dependencies files. ["input-file-name", ...]
         dependenciesModules: [],    // ModuleNameStringArray: [module, ...]
