@@ -213,7 +213,7 @@ function _loadDependenciesModule(options,  // @arg Object: { dependenciesFiles, 
 
                 if (fs.existsSync(path)) {
                     options.dependenciesModules.push(moduleName);
-                    _loadDependenciesModule(options, property, dir + "node_modules/" + moduleName + "/", file);
+                    _loadDependenciesModule(options, dir + "node_modules/" + moduleName + "/", file);
                 }
             }
         });
@@ -248,7 +248,7 @@ function _loadDevDependenciesModule(options,  // @arg Object: { devDependenciesF
 
                 if (fs.existsSync(path)) {
                     options.devDependenciesModules.push(moduleName);
-                    _loadDevDependenciesModule(options, property, dir + "node_modules/" + moduleName + "/", file);
+                    _loadDevDependenciesModule(options, dir + "node_modules/" + moduleName + "/", file);
                 }
             }
         });
