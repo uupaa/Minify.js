@@ -1,0 +1,22 @@
+{
+  "solo": {
+    "name": {
+      "git": "Minify.js",
+      "npm": "uupaa.minify.js"
+    },
+    "files": [
+      "lib/Minify.js"
+    ],
+    "modules": []
+  },
+  "release": {
+    "name": {
+      "git": "Minify.js",
+      "npm": "uupaa.minify.js"
+    },
+    "files": [
+      "./lib/Minify.js"
+    ],
+    "modules": []
+  }
+}
