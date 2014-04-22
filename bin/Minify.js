@@ -126,11 +126,13 @@ function _loadCurrentDirectoryPackageJSON() {
     var build  = json["x-build"] || json["build"] || {};
     var files  = build.files  || build.inputs || [];        // build.files is deprecated.
     var output = build.output || "";
+    var target = build.target || ["Browser", "Worker", "Node"];
 
     return {
         name:   { git: git, npm: npm },
         files:  files,
-        output: output
+        output: output,
+        target: target
     };
 }
 
@@ -140,6 +142,7 @@ function _saveBuildSettings(options) {
             build: {
                 files:  options.files,
                 output: options.output,
+                target: options.target
             },
             dependenciesFiles: options.dependenciesFiles,
             dependenciesModules: options.dependenciesModules,

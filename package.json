@@ -1,6 +1,6 @@
 {
   "name":           "uupaa.minify.js",
-  "version":        "0.9.4",
+  "version":        "0.9.5",
   "description":    "JavaScript source code minifier.",
   "url":            "https://github.com/uupaa/Minify.js",
   "keywords":       ["Minify", "util", "uupaa", "WebModule"],
@@ -16,7 +16,8 @@
   },
   "x-build": {
     "files":        ["lib/Minify.js"],
-    "output":       "release/Minify.min.js"
+    "output":       "release/Minify.min.js",
+    "target":       []
   },
   "dependencies": {
   },
