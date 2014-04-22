@@ -218,8 +218,10 @@ function _loadModule(options, // @arg Object: { files, modules }
     var build = json["x-build"] || json["build"];
 
     if (build) {
-        if (Array.isArray(build.files)) {
-            build.files.forEach(function(file) {
+        var files = build.files || build.inputs || null; // build.inputs is deprecated.
+
+        if (Array.isArray(files)) {
+            files.forEach(function(file) {
                 if (options.moduleFiles.indexOf(file) < 0) { // avoid duplicate
                     options.moduleFiles.push(dir + file);
                 }
