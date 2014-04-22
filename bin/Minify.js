@@ -77,15 +77,19 @@ if (!options.workDir.length) {
     return;
 }
 
-if (options.verbose) {
-    console.log(_CONSOLE_COLOR.GREEN + "modules: " + JSON.stringify(options.modules, null, 2) + _CONSOLE_COLOR.CLEAR);
-    console.log(_CONSOLE_COLOR.GREEN + "inputs: "  + JSON.stringify(options.inputs,  null, 2) + _CONSOLE_COLOR.CLEAR);
-}
-if (options.save) {
-    fs.writeFileSync(options.save, JSON.stringify({
+if (options.verbose || options.save) {
+    var packageJSON = JSON.parse( fs.readFileSync("./package.json") );
+    var object = {
+        name:    packageJSON.name,
         modules: options.modules,
         inputs:  options.inputs
-    }, null, 2));
+    };
+    if (options.verbose) {
+        console.log(_CONSOLE_COLOR.GREEN + JSON.stringify(object, null, 2) + _CONSOLE_COLOR.CLEAR);
+    }
+    if (options.save) {
+        fs.writeFileSync(options.save, JSON.stringify(object, null, 2));
+    }
 }
 
 Minify(options.inputs, {
