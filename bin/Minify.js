@@ -85,11 +85,15 @@ if (!options.workDir.length) {
 var files = options.files;
 
 if (options.release) {
-    var nodeData = NodeModule.load({ develop: true });
+    var nodeData = NodeModule.load();
+
 
     files = [].concat(nodeData.dependenciesFiles, options.files);
-}
 
+    if (options.verbose) {
+        console.log("Release build files: " + JSON.stringify(files, null, 2));
+    }
+}
 Minify(files, {
     "brew":         options.brew,
     "keep":         options.keep,
