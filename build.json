@@ -7,7 +7,8 @@
     "files": [
       "lib/Minify.js"
     ],
-    "output": "release/Minify.min.js"
+    "output": "release/Minify.min.js",
+    "target": []
   },
   "moduleTargets": {
     "uupaa.minify.js": []

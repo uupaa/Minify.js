@@ -237,6 +237,11 @@ function _loadDependenciesModule(options,  // @arg Object: { dependenciesFiles, 
                     }
                 });
             }
+            if (!build.target) {
+                if (options.verbose) {
+                    console.log(_CONSOLE_COLOR.YELLOW + "build.target undefined in " + json.name + _CONSOLE_COLOR.CLEAR);
+                }
+            }
             options.moduleTargets[json.name] = build.target;
         }
     }
@@ -272,6 +277,11 @@ function _loadDevDependenciesModule(options,  // @arg Object: { devDependenciesF
                         options.devDependenciesFiles.push(dir + file);
                     }
                 });
+            }
+            if (!build.target) {
+                if (options.verbose) {
+                    console.log(_CONSOLE_COLOR.YELLOW + "build.target undefined in " + json.name + _CONSOLE_COLOR.CLEAR);
+                }
             }
             options.moduleTargets[json.name] = build.target;
         }
