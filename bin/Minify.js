@@ -85,8 +85,7 @@ if (!options.workDir.length) {
 var files = options.files;
 
 if (options.release) {
-    var nodeData = NodeModule.load();
-
+    var nodeData = NodeModule.collectModuleData();
 
     files = [].concat(nodeData.dependenciesFiles, options.files);
 
