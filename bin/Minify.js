@@ -87,7 +87,7 @@ var files = options.files;
 if (options.release) {
     var nodeData = NodeModule.collectModuleData();
 
-    files = [].concat(nodeData.dependenciesFiles, options.files);
+    files = [].concat(nodeData.files, options.files);
 
     if (options.verbose) {
         console.log("Release build files: " + JSON.stringify(files, null, 2));
