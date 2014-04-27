@@ -82,18 +82,20 @@ if (!options.workDir.length) {
     return;
 }
 
-var files = options.files;
+var inputFiles = options.files;
 
 if (options.release) {
-    var nodeData = NodeModule.collectModuleData();
+    var files = NodeModule.files().all;
 
-    files = [].concat(nodeData.files, options.files);
+    console.log("files: " + JSON.stringify(files, null, 2));
+
+    inputFiles = [].concat(files, inputFiles);
 
     if (options.verbose) {
-        console.log("Release build files: " + JSON.stringify(files, null, 2));
+        console.log("Release build files: " + JSON.stringify(inputFiles, null, 2));
     }
 }
-Minify(files, {
+Minify(inputFiles, {
     "brew":         options.brew,
     "keep":         options.keep,
     "nowrap":       options.nowrap,
