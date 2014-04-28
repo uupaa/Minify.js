@@ -87,9 +87,7 @@ var inputFiles = options.files;
 if (options.release) {
     var files = NodeModule.files().all;
 
-    console.log("files: " + JSON.stringify(files, null, 2));
-
-    inputFiles = [].concat(files, inputFiles);
+    inputFiles = NodeModule.uniqueArray([].concat(files, inputFiles)).unique;
 
     if (options.verbose) {
         console.log("Release build files: " + JSON.stringify(inputFiles, null, 2));
