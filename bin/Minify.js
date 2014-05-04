@@ -59,7 +59,7 @@ var options = {
         verbose:    false,          // Boolean: true is verbose mode.
         workDir:    "",             // PathString: work dir.
         advanced:   true,           // Boolean: true is ADVANCED_OPTIMIZATIONS MODE.
-        preprocess: ["assert"]      // LabelStringArray: ["assert", "debug", ...]
+        preprocess: ["assert", "debug"] // LabelStringArray: ["assert", "debug", ...]
     };
 
 
