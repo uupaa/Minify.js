@@ -39,7 +39,7 @@ var Minify  = require("../lib/Minify");
 var argv    = process.argv.slice(2);
 var NodeModule = require("uupaa.nodemodule.js");
 var package = _loadCurrentDirectoryPackageJSON();
-var options = {
+var options = _parseCommandLineOptions({
         name:       package.name,   // Object: { git:String, npm:String }. github repository name, npm package name.
         brew:       false,          // Boolean: use brew installed closure-compiler.
         help:       false,          // Boolean: true is show help.
@@ -54,16 +54,13 @@ var options = {
         output:     package.output, // PathString: "output-file-name"
         option:     [],             // OptionStringArray: ["language_in ECMASCRIPT5_STRICT", ...];
         compile:    true,           // Boolean: true is compile.
-        release:    false,          // Boolean: true is release build, use dependenciesFiles.
+        release:    false,          // Boolean: true is release build, use NodeModule.files().
         externs:    [],             // ExternFilePathArray: ["externs-file-name", ...]
         verbose:    false,          // Boolean: true is verbose mode.
         workDir:    "",             // PathString: work dir.
         advanced:   true,           // Boolean: true is ADVANCED_OPTIMIZATIONS MODE.
-        preprocess: ["assert", "debug"] // LabelStringArray: ["assert", "debug", ...]
-    };
-
-
-options = _parseCommandLineOptions(options);
+        preprocess: ["dev", "develop", "debug", "assert"] // LabelStringArray:
+    });
 
 if (options.help) {
     console.log(_CONSOLE_COLOR.YELLOW + _USAGE + _CONSOLE_COLOR.CLEAR);
@@ -153,7 +150,7 @@ function _parseCommandLineOptions(options) {
         case "--module":
         case "--relase":    options.release = true; break;
         default:
-            if (argv[i][0] === "@") {
+            if (argv[i][0] === "@") { // @label
                 options.preprocess.push(argv[i].slice(1));
             } else {
                 if (options.files.indexOf(argv[i]) < 0) { // avoid duplicate
