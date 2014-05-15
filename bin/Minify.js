@@ -90,6 +90,12 @@ if (options.release) {
         console.log("Release build files: " + JSON.stringify(inputFiles, null, 2));
     }
 }
+
+if (!_isFileExists(inputFiles)) {
+    console.log(_CONSOLE_COLOR.YELLOW + _USAGE + _CONSOLE_COLOR.CLEAR);
+    return;
+}
+
 Minify(inputFiles, {
     "brew":         options.brew,
     "keep":         options.keep,
@@ -126,6 +132,17 @@ function _loadCurrentDirectoryPackageJSON() {
         output: output,
         target: target
     };
+}
+
+function _isFileExists(fileList) { // @arg Array:
+                                    // @ret Boolean:
+    return fileList.every(function(file) {
+        if (!fs.existsSync(file)) {
+            console.log(_CONSOLE_COLOR.RED + "File not found: " + file + _CONSOLE_COLOR.CLEAR);
+            return false;
+        }
+        return true;
+    });
 }
 
 function _parseCommandLineOptions(options) {
