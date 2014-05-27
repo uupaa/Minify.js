@@ -2,7 +2,7 @@
 
 (function(global) {
 
-var _USAGE = _multiline(function() {/*
+var USAGE = _multiline(function() {/*
     Usage:
         node Minify.js [@label ...]
                        [--brew]
@@ -27,7 +27,7 @@ var _USAGE = _multiline(function() {/*
         https://github.com/uupaa/Minify.js/wiki/Minify
 */});
 
-var _CONSOLE_COLOR = {
+var CONSOLE_COLOR = {
         RED:    "\u001b[31m",
         YELLOW: "\u001b[33m",
         GREEN:  "\u001b[32m",
@@ -40,42 +40,42 @@ var argv    = process.argv.slice(2);
 var NodeModule = require("uupaa.nodemodule.js");
 var package = _loadCurrentDirectoryPackageJSON();
 var options = _parseCommandLineOptions({
-        name:       package.name,   // Object: { git:String, npm:String }. github repository name, npm package name.
-        brew:       false,          // Boolean: use brew installed closure-compiler.
-        help:       false,          // Boolean: true is show help.
-        keep:       false,          // Boolean: keep tmp file.
-        nowrap:     false,          // Boolean: false is wrap WebModule idiom.
-        header:     "",             // PathString: header file.
-        footer:     "",             // PathString: footer file.
-        strict:     false,          // Boolean: true is add 'use strict'.
-        pretty:     false,          // Boolean: true is pretty print.
-        files:      package.files,  // PathStringArray: package.json x-build.files. ["input-file-name", ...]
-        target:     package.target, // StringArray: build target. ["Browser", "Worker", "Node"]
-        output:     package.output, // PathString: "output-file-name"
-        option:     [],             // OptionStringArray: ["language_in ECMASCRIPT5_STRICT", ...];
-        compile:    true,           // Boolean: true is compile.
-        release:    false,          // Boolean: true is release build, use NodeModule.files().
+        name:       package.name,   // Object       - { git:String, npm:String }. github repository name, npm package name.
+        brew:       false,          // Boolean      - use brew installed closure-compiler.
+        help:       false,          // Boolean      - true is show help.
+        keep:       false,          // Boolean      - keep tmp file.
+        nowrap:     false,          // Boolean      - false -> wrap WebModule idiom.
+        header:     "",             // PathString   - header file.
+        footer:     "",             // PathString   - footer file.
+        strict:     false,          // Boolean      - true -> add 'use strict'.
+        pretty:     false,          // Boolean      - true -> pretty print.
+        files:      package.files,  // PathStringArray - package.json x-build.files. ["input-file-name", ...]
+        target:     package.target, // StringArray  - build target. ["Browser", "Worker", "Node"]
+        output:     package.output, // PathString   - "output-file-name"
+        option:     [],             // OptionStringArray - ["language_in ECMASCRIPT5_STRICT", ...];
+        compile:    true,           // Boolean      - true -> compile.
+        release:    false,          // Boolean      - true -> release build, use NodeModule.files().
         externs:    [],             // ExternFilePathArray: ["externs-file-name", ...]
-        verbose:    false,          // Boolean: true is verbose mode.
-        workDir:    "",             // PathString: work dir.
-        advanced:   true,           // Boolean: true is ADVANCED_OPTIMIZATIONS MODE.
+        verbose:    false,          // Boolean      - true -> verbose mode.
+        workDir:    "",             // PathString   - work dir.
+        advanced:   true,           // Boolean      - true -> ADVANCED_OPTIMIZATIONS MODE.
         preprocess: ["dev", "develop", "debug", "assert"] // LabelStringArray:
     });
 
 if (options.help) {
-    console.log(_CONSOLE_COLOR.YELLOW + _USAGE + _CONSOLE_COLOR.CLEAR);
+    console.log(CONSOLE_COLOR.YELLOW + USAGE + CONSOLE_COLOR.CLEAR);
     return;
 }
 if (!options.files.length) {
-    console.log(_CONSOLE_COLOR.RED + "Input files are empty." + _CONSOLE_COLOR.CLEAR);
+    console.log(CONSOLE_COLOR.RED + "Input files are empty." + CONSOLE_COLOR.CLEAR);
     return;
 }
 if (!options.output.length) {
-    console.log(_CONSOLE_COLOR.RED + "Output file is empty." + _CONSOLE_COLOR.CLEAR);
+    console.log(CONSOLE_COLOR.RED + "Output file is empty." + CONSOLE_COLOR.CLEAR);
     return;
 }
 if (!options.workDir.length) {
-    console.log(_CONSOLE_COLOR.RED + "WorkDir is empty." + _CONSOLE_COLOR.CLEAR);
+    console.log(CONSOLE_COLOR.RED + "WorkDir is empty." + CONSOLE_COLOR.CLEAR);
     return;
 }
 
@@ -92,7 +92,7 @@ if (options.release) {
 }
 
 if (!_isFileExists(inputFiles)) {
-    console.log(_CONSOLE_COLOR.YELLOW + _USAGE + _CONSOLE_COLOR.CLEAR);
+    console.log(CONSOLE_COLOR.YELLOW + USAGE + CONSOLE_COLOR.CLEAR);
     return;
 }
 
@@ -111,8 +111,8 @@ Minify(inputFiles, {
     "workDir":      options.workDir,
     "advanced":     options.advanced,
     "preprocess":   options.preprocess
-}, function(err,  // @arg Error:
-            js) { // @arg String: minified JavaScript Expression string.
+}, function(err,  // @arg Error
+            js) { // @arg String - minified JavaScript Expression string.
     fs.writeFileSync(options.output, js);
 });
 
@@ -122,9 +122,9 @@ function _loadCurrentDirectoryPackageJSON() {
     var npm    = json["name"] || "";
     var git    =(json["url"] || "").split("/").pop();
     var build  = json["x-build"] || json["build"] || {};
-    var files  = build.files  || build.inputs || [];        // build.files is deprecated.
-    var output = build.output || "";
-    var target = build.target || ["Browser", "Worker", "Node"];
+    var files  = build.files   || [];
+    var output = build.output  || "";
+    var target = build.target  || ["all"];
 
     return {
         name:   { git: git, npm: npm },
@@ -134,11 +134,11 @@ function _loadCurrentDirectoryPackageJSON() {
     };
 }
 
-function _isFileExists(fileList) { // @arg Array:
-                                    // @ret Boolean:
+function _isFileExists(fileList) { // @arg Array
+                                   // @ret Boolean
     return fileList.every(function(file) {
         if (!fs.existsSync(file)) {
-            console.log(_CONSOLE_COLOR.RED + "File not found: " + file + _CONSOLE_COLOR.CLEAR);
+            console.log(CONSOLE_COLOR.RED + "File not found: " + file + CONSOLE_COLOR.CLEAR);
             return false;
         }
         return true;
@@ -188,8 +188,8 @@ function _parseCommandLineOptions(options) {
     return options;
 }
 
-function _multiline(fn) { // @arg Function:
-                          // @ret String:
+function _multiline(fn) { // @arg Function
+                          // @ret String
     return (fn + "").split("\n").slice(1, -1).join("\n");
 }
 
