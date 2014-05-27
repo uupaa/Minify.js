@@ -1,6 +1,6 @@
 {
   "name":           "uupaa.minify.js",
-  "version":        "0.10.12",
+  "version":        "0.10.13",
   "description":    "JavaScript source code minifier.",
   "url":            "https://github.com/uupaa/Minify.js",
   "keywords":       ["Minify", "util", "uupaa", "WebModule"],
@@ -30,7 +30,6 @@
     "uupaa.nodemodule.js": "",
     "uupaa.reflection.js": "",
     "uupaa.console.js": "",
-    "uupaa.valid.js": "",
     "uupaa.help.js": ""
 
   },
