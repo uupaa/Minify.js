@@ -171,7 +171,7 @@ function _parseCommandLineOptions(options) {
         case "--option":    _pushif(options.option, argv[++i]); break;
         case "--module":
         case "--relase":    options.release = true; break;
-        case "--label":     _pushif(options.label, argv[++i]); break;
+        case "--label":     _pushif(options.label, argv[++i].replace(/^@/, "")); break;
         case "--source":    _pushif(options.source, argv[++i]); break;
         default:
             throw new Error("Unknown option: " + argv[i]);
