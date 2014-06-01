@@ -17,11 +17,11 @@ var USAGE = _multiline(function() {/*
                        [--strict]
                        [--pretty]
                        [--option "compile option"]
-                       [--extern extern-file]
-                       [--output output-file]
-                       [--module]
+                       [--extern file]
+                       [--output file]
+                       [--source file]
+                       [--label @label]
                        [--release]
-                       [input-files [input-files...]]
 
     See:
         https://github.com/uupaa/Minify.js/wiki/Minify
@@ -44,30 +44,30 @@ var options = _parseCommandLineOptions({
         brew:       false,          // Boolean      - use brew installed closure-compiler.
         help:       false,          // Boolean      - true is show help.
         keep:       false,          // Boolean      - keep tmp file.
+        label:      ["dev", "debug", "assert"] // LabelStringArray
         nowrap:     false,          // Boolean      - false -> wrap WebModule idiom.
         header:     "",             // PathString   - header file.
         footer:     "",             // PathString   - footer file.
         strict:     false,          // Boolean      - true -> add 'use strict'.
         pretty:     false,          // Boolean      - true -> pretty print.
-        files:      package.files,  // PathStringArray - package.json x-build.files. ["input-file-name", ...]
+        source:     package.source, // PathStringArray - package.json x-build.source. ["source-file", ...]
         target:     package.target, // StringArray  - build target. ["Browser", "Worker", "Node"]
         output:     package.output, // PathString   - "output-file-name"
-        option:     [],             // OptionStringArray - ["language_in ECMASCRIPT5_STRICT", ...];
+        option:     [],             // OptionStringArray - ["language_in ECMASCRIPT5_STRICT", ...]
         compile:    true,           // Boolean      - true -> compile.
         release:    false,          // Boolean      - true -> release build, use NodeModule.files().
-        externs:    [],             // ExternFilePathArray: ["externs-file-name", ...]
+        externs:    [],             // FilePathArray- ["externs-file-name", ...]
         verbose:    false,          // Boolean      - true -> verbose mode.
         workDir:    "",             // PathString   - work dir.
         advanced:   true,           // Boolean      - true -> ADVANCED_OPTIMIZATIONS MODE.
-        preprocess: ["dev", "develop", "debug", "assert"] // LabelStringArray:
     });
 
 if (options.help) {
     console.log(CONSOLE_COLOR.YELLOW + USAGE + CONSOLE_COLOR.CLEAR);
     return;
 }
-if (!options.files.length) {
-    console.log(CONSOLE_COLOR.RED + "Input files are empty." + CONSOLE_COLOR.CLEAR);
+if (!options.source.length) {
+    console.log(CONSOLE_COLOR.RED + "Input source are empty." + CONSOLE_COLOR.CLEAR);
     return;
 }
 if (!options.output.length) {
@@ -79,26 +79,31 @@ if (!options.workDir.length) {
     return;
 }
 
-var inputFiles = options.files;
+var sources = options.source;
 
 if (options.release) {
-    var files = NodeModule.files().all;
+    var source = NodeModule.files().all;
 
-    inputFiles = NodeModule.uniqueArray([].concat(files, inputFiles)).unique;
+    sources = NodeModule.uniqueArray([].concat(source, sources)).unique;
 
     if (options.verbose) {
-        console.log("Release build files: " + JSON.stringify(inputFiles, null, 2));
+        console.log("Release build source: " + JSON.stringify(sources, null, 2));
     }
 }
 
-if (!_isFileExists(inputFiles)) {
+if (!_isFileExists(options.externs)) {
+    console.log(CONSOLE_COLOR.YELLOW + _USAGE + CONSOLE_COLOR.CLEAR);
+    return;
+}
+if (!_isFileExists(sources)) {
     console.log(CONSOLE_COLOR.YELLOW + USAGE + CONSOLE_COLOR.CLEAR);
     return;
 }
 
-Minify(inputFiles, {
+Minify(sources, {
     "brew":         options.brew,
     "keep":         options.keep,
+    "label":        options.label,
     "nowrap":       options.nowrap,
     "header":       options.header,
     "footer":       options.footer,
@@ -109,8 +114,7 @@ Minify(inputFiles, {
     "externs":      options.externs,
     "verbose":      options.verbose,
     "workDir":      options.workDir,
-    "advanced":     options.advanced,
-    "preprocess":   options.preprocess
+    "advanced":     options.advanced
 }, function(err,  // @arg Error
             js) { // @arg String - minified JavaScript Expression string.
     fs.writeFileSync(options.output, js);
@@ -122,13 +126,13 @@ function _loadCurrentDirectoryPackageJSON() {
     var npm    = json["name"] || "";
     var git    =(json["url"] || "").split("/").pop();
     var build  = json["x-build"] || json["build"] || {};
-    var files  = build.files   || [];
+    var source = build.source  || build.files || [];
     var output = build.output  || "";
     var target = build.target  || ["all"];
 
     return {
         name:   { git: git, npm: npm },
-        files:  files,
+        source: source,
         output: output,
         target: target
     };
@@ -162,18 +166,15 @@ function _parseCommandLineOptions(options) {
         case "--keep":      options.keep = true; break;
         case "--simple":    options.advanced = false; break;
         case "--output":    options.output = argv[++i]; break;
-        case "--extern":    options.externs.push( argv[++i] ); break;
-        case "--option":    options.option.push( argv[++i] ); break;
+        case "--extern":
+        case "--externs":   _pushif(options.externs, argv[++i]); break;
+        case "--option":    _pushif(options.option, argv[++i]); break;
         case "--module":
         case "--relase":    options.release = true; break;
+        case "--label":     _pushif(options.label, argv[++i]); break;
+        case "--source":    _pushif(options.source, argv[++i]); break;
         default:
-            if (argv[i][0] === "@") { // @label
-                options.preprocess.push(argv[i].slice(1));
-            } else {
-                if (options.files.indexOf(argv[i]) < 0) { // avoid duplicate
-                    options.files.push(argv[i]);
-                }
-            }
+            throw new Error("Unknown option: " + argv[i]);
         }
     }
     // work dir
@@ -186,6 +187,12 @@ function _parseCommandLineOptions(options) {
         }
     }
     return options;
+}
+
+function _pushif(source, value) {
+    if (source.indexOf(value) < 0) { // avoid duplicate
+        source.push(value);
+    }
 }
 
 function _multiline(fn) { // @arg Function
