@@ -44,7 +44,7 @@ var options = _parseCommandLineOptions({
         brew:       false,          // Boolean      - use brew installed closure-compiler.
         help:       false,          // Boolean      - true is show help.
         keep:       false,          // Boolean      - keep tmp file.
-        label:      ["dev", "debug", "assert"] // LabelStringArray
+        label:      ["dev", "debug", "assert"], // LabelStringArray
         nowrap:     false,          // Boolean      - false -> wrap WebModule idiom.
         header:     "",             // PathString   - header file.
         footer:     "",             // PathString   - footer file.
@@ -59,7 +59,7 @@ var options = _parseCommandLineOptions({
         externs:    [],             // FilePathArray- ["externs-file-name", ...]
         verbose:    false,          // Boolean      - true -> verbose mode.
         workDir:    "",             // PathString   - work dir.
-        advanced:   true,           // Boolean      - true -> ADVANCED_OPTIMIZATIONS MODE.
+        advanced:   true            // Boolean      - true -> ADVANCED_OPTIMIZATIONS MODE.
     });
 
 if (options.help) {
