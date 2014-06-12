@@ -92,7 +92,7 @@ if (options.release) {
 }
 
 if (!_isFileExists(options.externs)) {
-    console.log(CONSOLE_COLOR.YELLOW + _USAGE + CONSOLE_COLOR.CLEAR);
+    console.log(CONSOLE_COLOR.YELLOW + USAGE + CONSOLE_COLOR.CLEAR);
     return;
 }
 if (!_isFileExists(sources)) {
