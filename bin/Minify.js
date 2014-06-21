@@ -170,7 +170,7 @@ function _parseCommandLineOptions(options) {
         case "--externs":   _pushif(options.externs, argv[++i]); break;
         case "--option":    _pushif(options.option, argv[++i]); break;
         case "--module":
-        case "--relase":    options.release = true; break;
+        case "--release":   options.release = true; break;
         case "--label":     _pushif(options.label, argv[++i].replace(/^@/, "")); break;
         case "--source":    _pushif(options.source, argv[++i]); break;
         default:
