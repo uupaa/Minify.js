@@ -38,9 +38,9 @@ var fs      = require("fs");
 var Minify  = require("../lib/Minify");
 var argv    = process.argv.slice(2);
 var NodeModule = require("uupaa.nodemodule.js");
-var package = _loadCurrentDirectoryPackageJSON();
+var pkg     = _loadCurrentDirectoryPackageJSON();
 var options = _parseCommandLineOptions({
-        name:       package.name,   // Object       - { git:String, npm:String }. github repository name, npm package name.
+        name:       pkg.name,       // Object       - { git:String, npm:String }. github repository name, npm package name.
         brew:       false,          // Boolean      - use brew installed closure-compiler.
         help:       false,          // Boolean      - true is show help.
         keep:       false,          // Boolean      - keep tmp file.
@@ -50,9 +50,9 @@ var options = _parseCommandLineOptions({
         footer:     "",             // PathString   - footer file.
         strict:     false,          // Boolean      - true -> add 'use strict'.
         pretty:     false,          // Boolean      - true -> pretty print.
-        source:     package.source, // PathStringArray - package.json x-build.source. ["source-file", ...]
-        target:     package.target, // StringArray  - build target. ["Browser", "Worker", "Node"]
-        output:     package.output, // PathString   - "output-file-name"
+        source:     pkg.source,     // PathStringArray - package.json x-build.source. ["source-file", ...]
+        target:     pkg.target,     // StringArray  - build target. ["Browser", "Worker", "Node"]
+        output:     pkg.output,     // PathString   - "output-file-name"
         option:     [],             // OptionStringArray - ["language_in ECMASCRIPT5_STRICT", ...]
         compile:    true,           // Boolean      - true -> compile.
         release:    false,          // Boolean      - true -> release build, use NodeModule.files().
