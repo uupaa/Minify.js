@@ -1,19 +1,17 @@
-Minify.js
-=========
+# Minify.js [![Build Status](https://travis-ci.org/uupaa/Minify.js.png)](http://travis-ci.org/uupaa/Minify.js)
 
-![](https://travis-ci.org/uupaa/Minify.js.png)
+[![npm](https://nodei.co/npm/uupaa.minify.js.png?downloads=true&stars=true)](https://nodei.co/npm/uupaa.minify.js/)
 
 JavaScript source code minifier.
 
-# Document
-
+## Document
 
 - [Minify.js wiki](https://github.com/uupaa/Minify.js/wiki/Minify)
 - [Development](https://github.com/uupaa/WebModule/wiki/Development)
 - [WebModule](https://github.com/uupaa/WebModule) ([Slide](http://uupaa.github.io/Slide/slide/WebModule/index.html))
 
 
-# for Developers
+## How to use
 
 1. Install development dependency tools
 

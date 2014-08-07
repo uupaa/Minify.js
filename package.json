@@ -1,18 +1,29 @@
 {
   "name":           "uupaa.minify.js",
-  "version":        "0.11.6",
+  "version":        "0.11.7",
   "description":    "JavaScript source code minifier.",
   "url":            "https://github.com/uupaa/Minify.js",
-  "keywords":       ["Minify", "util", "uupaa", "WebModule"],
+  "keywords":       ["Minify", "util", "uupaa", "WebModule", "Unstable"],
   "repository": {
     "type":         "git",
     "url":          "https://github.com/uupaa/Minify.js.git"
   },
   "scripts": {
+    "watch":        "",
     "build":        "node ./bin/Minify.js --verbose --strict --keep --pretty",
+    "build-simple": "",
     "build-release":"node ./bin/Minify.js --verbose --strict --module",
     "test":         "",
-    "test-node":    ""
+    "test-page":    "",
+    "test-debug":   "",
+    "test-node":    "",
+    "test-browser": "",
+    "test-sim":     "",
+    "server":       "http-server -c-1 -p 8585 &",
+    "server-stop":  "",
+    "server-kill":  "killall -- node /usr/local/bin/http-server -p 8585 ; exit 0",
+    "hint":         "jshint lib/*.js",
+    "lint":         "node node_modules/uupaa.plato.js; open lint/plato/index.html"
   },
   "x-build": {
     "source":       ["lib/Minify.js"],
