@@ -174,7 +174,11 @@ function _parseCommandLineOptions(options) {
         case "--label":     _pushif(options.label, argv[++i].replace(/^@/, "")); break;
         case "--source":    _pushif(options.source, argv[++i]); break;
         default:
-            throw new Error("Unknown option: " + argv[i]);
+            if ( /^@/.test(argv[i]) ) { // @label
+                _pushif(options.label, argv[i].replace(/^@/, ""));
+            } else {
+                throw new Error("Unknown option: " + argv[i]);
+            }
         }
     }
     // work dir

@@ -8,8 +8,9 @@ JavaScript source code minifier.
 
 - [Minify.js wiki](https://github.com/uupaa/Minify.js/wiki/Minify)
 - [Development](https://github.com/uupaa/WebModule/wiki/Development)
-- [WebModule](https://github.com/uupaa/WebModule) ([Slide](http://uupaa.github.io/Slide/slide/WebModule/index.html))
-
+- [WebModule](https://github.com/uupaa/WebModule)
+    - [Slide](http://uupaa.github.io/Slide/slide/WebModule/index.html)
+    - [Development](https://github.com/uupaa/WebModule/wiki/Development)
 
 ## How to use
 
