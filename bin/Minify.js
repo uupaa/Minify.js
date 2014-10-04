@@ -12,6 +12,10 @@ var USAGE = _multiline(function() {/*
                        [--nocompile]
                        [--header file]
                        [--footer file]
+                       [--es5in]
+                       [--es6in]
+                       [--es5out]
+                       [--es6out]
                        [--keep]
                        [--simple]
                        [--strict]
@@ -48,6 +52,10 @@ var options = _parseCommandLineOptions({
         nowrap:     false,          // Boolean      - false -> wrap WebModule idiom.
         header:     "",             // PathString   - header file.
         footer:     "",             // PathString   - footer file.
+        es5in:      false,          // Boolean      - input ES5 code.
+        es6in:      false,          // Boolean      - input ES6 code.
+        es5out:     false,          // Boolean      - output ES5 code.
+        es6out:     false,          // Boolean      - output ES6 code.
         strict:     false,          // Boolean      - true -> add 'use strict'.
         pretty:     false,          // Boolean      - true -> pretty print.
         source:     pkg.source,     // PathStringArray - package.json x-build.source. ["source-file", ...]
@@ -107,6 +115,10 @@ Minify(sources, {
     "nowrap":       options.nowrap,
     "header":       options.header,
     "footer":       options.footer,
+    "es5in":        options.es5in,
+    "es6in":        options.es6in,
+    "es5out":       options.es5out,
+    "es6out":       options.es6out,
     "strict":       options.strict,
     "pretty":       options.pretty,
     "option":       options.option,
@@ -161,6 +173,10 @@ function _parseCommandLineOptions(options) {
         case "--nocompile": options.compile = false; break;
         case "--header":    options.header = fs.readFileSync(argv[++i], "utf8"); break;
         case "--footer":    options.footer = fs.readFileSync(argv[++i], "utf8"); break;
+        case "--es5in":     options.es5in = true; break;
+        case "--es6in":     options.es6in = true; break;
+        case "--es5out":    options.es5out = true; break;
+        case "--es6out":    options.es6out = true; break;
         case "--strict":    options.strict = true; break;
         case "--pretty":    options.pretty = true; break;
         case "--keep":      options.keep = true; break;
